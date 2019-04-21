@@ -33,8 +33,10 @@ public class CatalogClient {
 	private long catalogServicePort;
 
 	@Autowired
-	public CatalogClient(@Value("${catalog.service.host:catalog}") String catalogServiceHost,
-			@Value("${catalog.service.port:8080}") long catalogServicePort) {
+	// TODO: come back to see if can get this to work
+	//public CatalogClient(@Value("${catalog.service.host:catalog}") String catalogServiceHost,
+	//		@Value("${catalog.service.port:8080}") long catalogServicePort) {
+	public CatalogClient(@Value("catalog-service") String catalogServiceHost, @Value("8080") long catalogServicePort) {
 		super();
 		this.restTemplate = getRestTemplate();
 		this.catalogServiceHost = catalogServiceHost;
