@@ -81,4 +81,18 @@ class OrderController {
 		return new ModelAndView("success");
 	}
 
+	@RequestMapping(value = "/version", method = RequestMethod.GET)
+	@ResponseBody
+	public String getVersion() {
+		 File file = new File("version"); 
+		 String version = "version not found";
+		 try {
+			 BufferedReader br = new BufferedReader(new FileReader(file));
+			 version = br.readLine();
+		 }
+		 catch(Exception e) {
+			 version = e.getMessage();
+		 }
+		 return version;
+	}
 }
