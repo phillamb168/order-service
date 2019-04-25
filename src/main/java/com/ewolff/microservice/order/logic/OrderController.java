@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ewolff.microservice.order.clients.CatalogClient;
 import com.ewolff.microservice.order.clients.Customer;
 import com.ewolff.microservice.order.clients.CustomerClient;
 import com.ewolff.microservice.order.clients.Item;
+
+import java.io.*;
 
 @Controller
 class OrderController {
