@@ -16,6 +16,9 @@ import com.ewolff.microservice.order.clients.Customer;
 import com.ewolff.microservice.order.clients.CustomerClient;
 import com.ewolff.microservice.order.clients.Item;
 
+import java.util.Calendar;
+import java.util.Date; 
+
 import java.io.*;
 
 @Controller
@@ -97,5 +100,14 @@ class OrderController {
 			 version = e.getMessage();
 		 }
 		 return version;
+	}
+
+	@RequestMapping(value = "/health", method = RequestMethod.GET)
+	@ResponseBody
+	public String getHealth() {
+
+		Date dateNow = Calendar.getInstance().getTime();
+		String health = "{ \"health\":[{\"service\":\"order-service\",\"status\":\"OK\",\"date\":\"" + dateNow + "\" }]}";
+		return health;
 	}
 }
