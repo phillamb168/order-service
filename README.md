@@ -30,6 +30,17 @@ This service needs to pull in data from the customr and catalog services, so the
   ```
 2. access application at ```http://localhost:8080```
 
+**NOTE**
+
+Can overview the internal port and service domain name
+```
+CUSTOMER_SERVICE_DOMAIN: "customer"
+CUSTOMER_SERVICE_PORT: "8080"
+
+CATALOG_SERVICE_DOMAIN: "catalog"
+CATALOG_SERVICE_PORT: "8080"
+```
+
 # Utilities
 
 ## 1. quicktest
