@@ -1,6 +1,11 @@
 package com.ewolff.microservice.order.logic;
 
 import java.util.Collection;
+import java.util.Random;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Calendar;
+import java.util.Date; 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,7 +54,30 @@ class OrderController {
 
 	@ModelAttribute("customers")
 	public Collection<Customer> customers() {
-		return customerClient.findAll();
+
+		System.out.println("APP_VERSION: " + System.getenv("APP_VERSION"));
+		if (System.getenv("APP_VERSION").equals("2")) {
+			System.out.println("N+1 problem = ON");
+			Collection<Customer> allCustomers = customerClient.findAll();
+			// ************************************************
+			// N+1 Problem
+			// Add additional lookups for each customer
+			// this will cause additional SQL calls
+			// ************************************************
+			Iterator<Customer> itr = allCustomers.iterator();
+			while (itr.hasNext()) {
+				Customer cust = itr.next();
+				long id = cust.getCustomerId();
+				for(int i=1; i<=20; i++){
+					customerClient.getOne(id);
+				}
+			}
+			return allCustomers;
+		}
+		else {
+			System.out.println("N+1 problem = OFF");
+			return customerClient.findAll();
+		}
 	}
 
 	@RequestMapping("/")
@@ -90,14 +118,12 @@ class OrderController {
 	@RequestMapping(value = "/version", method = RequestMethod.GET)
 	@ResponseBody
 	public String getVersion() {
-		 File file = new File("version"); 
-		 String version = "version not found";
+		 String version;
 		 try {
-			 BufferedReader br = new BufferedReader(new FileReader(file));
-			 version = br.readLine();
+			 version = System.getenv("APP_VERSION");
 		 }
 		 catch(Exception e) {
-			 version = e.getMessage();
+			 version = "APP_VERSION not found";
 		 }
 		 return version;
 	}
