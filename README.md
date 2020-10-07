@@ -40,6 +40,15 @@ CUSTOMER_SERVICE_PORT: "8080"
 CATALOG_SERVICE_DOMAIN: "catalog"
 CATALOG_SERVICE_PORT: "8080"
 ```
+## Build Docker Image
+
+Run unix shell script that builds and pushes docker images with multiple tags
+
+```./buildpush.sh <registry>```
+
+For example:
+
+```./quickbuild.sh dtdemos```
 
 # Utilities
 
@@ -53,12 +62,3 @@ For example:
 
 ```./quicktest.sh http://localhost:8080```
 
-## 2. quickbuild
-
-unix shell script that builds and pushes docker image named: keptn-orders-order-service:tag.  Just call:
-
-```./quickbuild.sh <registry> <tag>```
-
-For example:
-
-```./quickbuild.sh robjahn 1```
