@@ -1,25 +1,25 @@
 # Overview
 
-This repo has code for a Java spring-boot micro service.
-
-Demo app credits go to: https://github.com/ewolff/microservice-kubernetes
-
-The application is built and run using Jenkins.  See ```Jenkinsfile``` in this repo.
-
-This application will be packaged in a Docker image.  See ```Dockerfile``` in this repo
-
-NOTE: Known limitation of running locally and there is an open TODO to update the code.  Would like to have a Docker compose file as to start everything required.  So you can build images and deploy to kubernetes and the servies will be resolved by Kubernestes DNS.
+This repo has the code for the orders service for demostrations.  See the [overview](https://github.com/dt-orders/overview) repo for an overiew for that whole application.
 
 # Developer Notes
+
+This service needs to pull in data from the customer and catalog services, so they must be running.  If you are running from code, then you need to set the Environment variables to match the end points.
+
+```
+CUSTOMER_SERVICE_DOMAIN: "localhost"
+CUSTOMER_SERVICE_PORT: "8181"
+
+CATALOG_SERVICE_DOMAIN: "localhost"
+CATALOG_SERVICE_PORT: "8182"
+```
 
 ## Pre-requisites
 
 The following programs to be installed
 * Java 1.8
 * Maven
-* IDE such as VS Code
-
-This service needs to pull in data from the customr and catalog services, so they must be running.
+* Docker
 
 ## Build and Run Locally
 
@@ -30,31 +30,27 @@ This service needs to pull in data from the customr and catalog services, so the
   ```
 2. access application at ```http://localhost:8080```
 
-**NOTE**
+## Build Docker Images and push images to a repository
 
-Can overview the internal port and service domain name
-```
-CUSTOMER_SERVICE_DOMAIN: "customer"
-CUSTOMER_SERVICE_PORT: "8080"
+Use the provided Unix shell scipt that will build the docker image and publish it. There are three versions that will be built.
 
-CATALOG_SERVICE_DOMAIN: "catalog"
-CATALOG_SERVICE_PORT: "8080"
-```
-## Build Docker Image
+    Just call: `./buildpush.sh <REPOSITORY>`
 
-Run unix shell script that builds and pushes docker images with multiple tags
+    For example: `./buildpush.sh dtdemos`
 
-```./buildpush.sh <registry>```
+## Build Docker images and run locally 
 
-For example:
+Use the provided Unix shell scipt that will build the docker image and run it. 
 
-```./quickbuild.sh dtdemos```
+    Just call: `./buildrun.sh <REPOSITORY> <VERSION_TAG>`
 
-# Utilities
+    For example: `./buildrun.sh dtdemos 1`
 
-## 1. quicktest
+2. access application at ```http://localhost:8080```
 
-unix shell script that loops and calls the app URL.  Just call:
+## quicktest
+
+Use the provided Unix shell script that loops and calls the app URL.  Just call:
 
 ```./quicktest.sh <catalog base url>```
 
@@ -62,3 +58,6 @@ For example:
 
 ```./quicktest.sh http://localhost:8080```
 
+# Credits
+
+* Orginal demo code: https://github.com/ewolff/microservice-kubernetes
