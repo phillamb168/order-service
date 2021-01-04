@@ -1,15 +1,14 @@
 #!/bin/bash
 
 clear
-if [ $# -lt 1 ]
+REPOSITORY=$1
+
+if [ -z "$REPOSITORY" ]
 then
-  echo "missing arguments. Expect ./buildpush.sh <REPOSITORY> "
-  echo "example:   ./buildpush.sh dtdemos"
-  exit 1
+    REPOSITORY=dtdemos
 fi
 
 IMAGE=dt-orders-order-service
-REPOSITORY=$1
 FULLIMAGE=$REPOSITORY/$IMAGE
 
 #./mvnw clean package

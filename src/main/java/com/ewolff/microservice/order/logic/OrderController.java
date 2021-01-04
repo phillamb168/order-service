@@ -36,6 +36,8 @@ class OrderController {
 	private CustomerClient customerClient;
 	private CatalogClient catalogClient;
 
+	private String version;
+
 	@Autowired
 	private OrderController(OrderService orderService,
 			OrderRepository orderRepository, CustomerClient customerClient,
@@ -45,6 +47,17 @@ class OrderController {
 		this.customerClient = customerClient;
 		this.catalogClient = catalogClient;
 		this.orderService = orderService;
+		this.version = System.getenv("APP_VERSION");
+	}
+
+	private String getVersion() {
+		System.out.println("Current APP_VERSION: " + this.version);
+		return this.version;
+	}
+
+	private void setVersion(String newVersion) {
+		this.version = newVersion;
+		System.out.println("Setting APP_VERSION to: " + this.version);
 	}
 
 	@ModelAttribute("items")
@@ -55,8 +68,7 @@ class OrderController {
 	@ModelAttribute("customers")
 	public Collection<Customer> customers() {
 
-		System.out.println("APP_VERSION: " + System.getenv("APP_VERSION"));
-		if (System.getenv("APP_VERSION").equals("2")) {
+		if (this.getVersion().equals("2")) {
 			System.out.println("N+1 problem = ON");
 			Collection<Customer> allCustomers = customerClient.findAll();
 			// ************************************************
@@ -115,17 +127,23 @@ class OrderController {
 		return new ModelAndView("success");
 	}
 
-	@RequestMapping(value = "/version", method = RequestMethod.GET)
-	@ResponseBody
-	public String getVersion() {
-		 String version;
-		 try {
-			 version = System.getenv("APP_VERSION");
-		 }
-		 catch(Exception e) {
-			 version = "APP_VERSION not found";
-		 }
-		 return version;
+   @RequestMapping(value = "/version", method = RequestMethod.GET)
+   @ResponseBody
+   public String showVersion() {
+		String version;
+		try {
+			version = this.getVersion();
+		}
+		catch(Exception e) {
+			version = "APP_VERSION not found";
+		}
+		return version;
+   } 
+
+	@RequestMapping(value = "setversion/{version}", method = RequestMethod.GET)
+	public ModelAndView webSetVersion(@PathVariable("version") String newVersion) {
+		this.setVersion(newVersion);
+		return new ModelAndView("success");
 	}
 
 	@RequestMapping(value = "/health", method = RequestMethod.GET)
