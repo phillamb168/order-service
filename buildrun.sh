@@ -1,20 +1,32 @@
 #!/bin/bash
 
 clear
-if [ $# -lt 2 ]
+REPOSITORY=$1
+VERSION=$2
+DEV_MODE=$3
+
+if [ -z "$REPOSITORY" ]
 then
-  echo "missing arguments. Expect ./buildrun.sh <REPOSITORY> <VERSION_TAG>"
-  echo "example:   ./buildrun.sh dtdemos 1"
-  exit 1
+    REPOSITORY=dtdemos
+fi
+
+if [ -z "$VERSION" ]
+then
+    VERSION=1
+fi
+
+if [ -z "$DEV_MODE" ]
+then
+    DEV_MODE=false
 fi
 
 IMAGE=dt-orders-order-service
-REPOSITORY=$1
-VERSION_TAG=$2
-FULLIMAGE=$REPOSITORY/$IMAGE:$VERSION_TAG
+FULLIMAGE=$REPOSITORY/$IMAGE:$VERSION
 
 echo "Building: $FULLIMAGE"
-docker build -t $FULLIMAGE .
+./mvnw clean package -Dmaven.test.skip=true
+
+docker build -t $FULLIMAGE . --build-arg APP_VERSION=$VERSION
 
 echo ""
 echo "========================================================"
@@ -30,4 +42,5 @@ docker run -it -p 80:8080 \
   --env CUSTOMER_SERVICE_PORT=8181 \
   --env CATALOG_SERVICE_DOMAIN=172.17.0.1 \
   --env CATALOG_SERVICE_PORT=8182 \
+  --env DEV_MODE=$DEV_MODE \
   $FULLIMAGE 

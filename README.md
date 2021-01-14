@@ -14,6 +14,8 @@ CATALOG_SERVICE_DOMAIN: "localhost"
 CATALOG_SERVICE_PORT: "8182"
 ```
 
+There is a feature to run in `DEV_MODE` where the calls to customer and catalog services are not made.  When `DEV_MODE` is set, then the data is faked out.  Just set `DEV_MODE` as an environment variable. 
+
 ## Pre-requisites
 
 The following programs to be installed
@@ -42,9 +44,9 @@ Use the provided Unix shell scipt that will build the docker image and publish i
 
 Use the provided Unix shell scipt that will build the docker image and run it. 
 
-    Just call: `./buildrun.sh <REPOSITORY> <VERSION_TAG>`
+    Just call: `./buildrun.sh <REPOSITORY> <VERSION_TAG> <DEV_MODE>`
 
-    For example: `./buildrun.sh dtdemos 1`
+    For example: `./buildrun.sh dtdemos 1 true`
 
 2. access application at ```http://localhost:8080```
 

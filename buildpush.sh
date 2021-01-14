@@ -23,6 +23,11 @@ echo "Ready to push images ?"
 echo "========================================================"
 read -rsp "Press ctrl-c to abort. Press any key to continue"
 
+echo "Pushing $FULLIMAGE:1"
 docker push $FULLIMAGE:1
+
+echo "Pushing $FULLIMAGE:2"
 docker push $FULLIMAGE:2
+
+echo "Pushing $FULLIMAGE:3"
 docker push $FULLIMAGE:3

@@ -21,11 +21,6 @@ import com.ewolff.microservice.order.clients.Customer;
 import com.ewolff.microservice.order.clients.CustomerClient;
 import com.ewolff.microservice.order.clients.Item;
 
-import java.util.Calendar;
-import java.util.Date; 
-
-import java.io.*;
-
 @Controller
 class OrderController {
 
@@ -38,6 +33,12 @@ class OrderController {
 
 	private String version;
 
+	// during development can set to true so that you dont
+	// need to have the customer and catalog service running
+	private boolean devMode;
+
+	private static Random rand = new Random();
+
 	@Autowired
 	private OrderController(OrderService orderService,
 			OrderRepository orderRepository, CustomerClient customerClient,
@@ -48,6 +49,10 @@ class OrderController {
 		this.catalogClient = catalogClient;
 		this.orderService = orderService;
 		this.version = System.getenv("APP_VERSION");
+		this.devMode = Boolean.parseBoolean(System.getenv("DEV_MODE"));
+
+		System.out.println("Initial APP_VERSION: " + this.version);
+		System.out.println("devMode: " + Boolean.toString(devMode));
 	}
 
 	private String getVersion() {
@@ -62,33 +67,53 @@ class OrderController {
 
 	@ModelAttribute("items")
 	public Collection<Item> items() {
-		return catalogClient.findAll();
+		if(devMode) {
+			System.out.println("Get Items using fake data");
+			ArrayList <Item>items = new ArrayList<Item>();
+			items.add(new Item(1, "Item 1", 100.00));
+			items.add(new Item(2, "Item 2", 200.00));
+			items.add(new Item(3, "Item 3", 300.00));
+			return items;	
+		}
+		else
+		{
+			return catalogClient.findAll();
+		}
 	}
 
 	@ModelAttribute("customers")
 	public Collection<Customer> customers() {
-
-		if (this.getVersion().equals("2")) {
-			System.out.println("N+1 problem = ON");
-			Collection<Customer> allCustomers = customerClient.findAll();
-			// ************************************************
-			// N+1 Problem
-			// Add additional lookups for each customer
-			// this will cause additional SQL calls
-			// ************************************************
-			Iterator<Customer> itr = allCustomers.iterator();
-			while (itr.hasNext()) {
-				Customer cust = itr.next();
-				long id = cust.getCustomerId();
-				for(int i=1; i<=20; i++){
-					customerClient.getOne(id);
-				}
-			}
+		if(devMode) {
+			System.out.println("Get Customers using fake data");
+			Collection<Customer> allCustomers = new ArrayList<Customer>();
+			allCustomers.add(new Customer(1, "Dummy", "Customer1", "customer1@dummy.com", "1 Elm Street", "NYC"));
+			allCustomers.add(new Customer(2, "Dummy", "Customer2", "customer2@dummy.com", "1 Elm Street", "NYC"));
 			return allCustomers;
 		}
-		else {
-			System.out.println("N+1 problem = OFF");
-			return customerClient.findAll();
+		else
+		{
+			if (this.getVersion().equals("2")) {
+				System.out.println("N+1 problem = ON");
+				Collection<Customer> allCustomers = customerClient.findAll();
+				// ************************************************
+				// N+1 Problem
+				// Add additional lookups for each customer
+				// this will cause additional SQL calls
+				// ************************************************
+				Iterator<Customer> itr = allCustomers.iterator();
+				while (itr.hasNext()) {
+					Customer cust = itr.next();
+					long id = cust.getCustomerId();
+					for(int i=1; i<=20; i++){
+						customerClient.getOne(id);
+					}
+				}
+				return allCustomers;
+			}
+			else {
+				System.out.println("N+1 problem = OFF");
+				return customerClient.findAll();
+			}
 		}
 	}
 
@@ -105,8 +130,31 @@ class OrderController {
 
 	@RequestMapping(value = "/line", method = RequestMethod.POST)
 	public ModelAndView addLine(Order order) {
-		order.addLine(0, catalogClient.findAll().iterator().next().getItemId());
-		return new ModelAndView("orderForm", "order", order);
+
+		if (this.getVersion().equals("2")) {
+			System.out.println("Order Line Exception Problem = ON");
+			// ************************************************
+			// in 50% of the cases will return incorrect data
+			// back resulting in a 500 error in the UI
+			// ************************************************
+			int n = rand.nextInt(100);
+			System.out.println("Random Number: " + Integer.toString(n));
+			if(n < 50) {
+				System.out.println("ADDING A NULL FOR ORDER!!");
+				return new ModelAndView("orderForm", "order", null);
+			}
+		}
+		if(devMode) {
+			System.out.println("Get Order Line using fake data");
+			order.addLine(0, 1);
+			return new ModelAndView("orderForm", "order", order);
+		}
+		else
+		{
+			System.out.println("Order Line Exception Problem = OFF");
+			order.addLine(0, catalogClient.findAll().iterator().next().getItemId());
+			return new ModelAndView("orderForm", "order", order);
+		}
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
