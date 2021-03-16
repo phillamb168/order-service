@@ -76,7 +76,6 @@ public class CustomerClient {
 
 	private String customerURL() {
 		String url = String.format("http://%s:%s/customer/", customerServiceHost, customerServicePort);
-		log.trace("Customer: URL {} ", url);
 		return url;
 
 	}

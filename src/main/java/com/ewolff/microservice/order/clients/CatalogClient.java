@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.MediaTypes;
@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class CatalogClient {
 
-	private final Logger log = LoggerFactory.getLogger(CatalogClient.class);
+	//private final Logger log = LoggerFactory.getLogger(CatalogClient.class);
 
 	public static class ItemPagedResources extends PagedResources<Item> {
 
@@ -64,7 +64,6 @@ public class CatalogClient {
 
 	private String catalogURL() {
 		String url = String.format("http://%s:%s/catalog/", catalogServiceHost, catalogServicePort);
-		log.trace("Catalog: URL {} ", url);
 		return url;
 	}
 

@@ -7,6 +7,9 @@ import java.util.Iterator;
 import java.util.Calendar;
 import java.util.Date; 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,6 +26,8 @@ import com.ewolff.microservice.order.clients.Item;
 
 @Controller
 class OrderController {
+
+	private final Logger log = LoggerFactory.getLogger(CatalogClient.class);
 
 	private OrderRepository orderRepository;
 
@@ -51,6 +56,7 @@ class OrderController {
 		this.version = System.getenv("APP_VERSION");
 		this.devMode = Boolean.parseBoolean(System.getenv("DEV_MODE"));
 
+		log.debug("Initial APP_VERSION: " + this.version);
 		System.out.println("Initial APP_VERSION: " + this.version);
 		System.out.println("devMode: " + Boolean.toString(devMode));
 	}
