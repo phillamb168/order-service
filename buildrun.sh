@@ -25,6 +25,7 @@ FULLIMAGE=$REPOSITORY/$IMAGE:$VERSION
 
 echo "Building: $FULLIMAGE"
 ./mvnw clean package -Dmaven.test.skip=true
+./writeManifest.sh
 
 docker build -t $FULLIMAGE . --build-arg APP_VERSION=$VERSION
 

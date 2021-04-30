@@ -12,7 +12,9 @@ IMAGE=dt-orders-order-service
 FULLIMAGE=$REPOSITORY/$IMAGE
 
 #./mvnw clean package
+echo "Compiling Java"
 ./mvnw clean package -Dmaven.test.skip=true
+./writeManifest.sh
 
 docker build -t $FULLIMAGE:1 . --build-arg APP_VERSION=1
 docker build -t $FULLIMAGE:2 . --build-arg APP_VERSION=2
