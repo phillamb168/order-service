@@ -71,6 +71,11 @@ class OrderController {
 		System.out.println("Setting APP_VERSION to: " + this.version);
 	}
 
+	private void throwException() throws Exception {
+		System.out.println("Throwing fake exception");
+		throw new Exception("Throwing fake exception");
+	}
+
 	@ModelAttribute("items")
 	public Collection<Item> items() {
 		if(devMode) {
@@ -124,18 +129,31 @@ class OrderController {
 	}
 
 	@RequestMapping("/")
-	public ModelAndView orderList() {
+	public ModelAndView orderList() throws Exception {
+
+		if (this.getVersion().equals("3")) {
+			this.throwException();
+		}
 		return new ModelAndView("orderlist", "orders",
 				orderRepository.findAll());
 	}
 
 	@RequestMapping(value = "/form.html", method = RequestMethod.GET)
-	public ModelAndView form() {
+	public ModelAndView form() throws Exception {
+
+		if (this.getVersion().equals("3")) {
+			this.throwException();
+		}
+		
 		return new ModelAndView("orderForm", "order", new Order());
 	}
 
 	@RequestMapping(value = "/line", method = RequestMethod.POST)
-	public ModelAndView addLine(Order order) {
+	public ModelAndView addLine(Order order) throws Exception {
+
+		if (this.getVersion().equals("3")) {
+			this.throwException();
+		}
 
 		if (this.getVersion().equals("2")) {
 			System.out.println("Order Line Exception Problem = ON");
@@ -164,18 +182,31 @@ class OrderController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ModelAndView get(@PathVariable("id") long id) {
+	public ModelAndView get(@PathVariable("id") long id) throws Exception {
+
+		if (this.getVersion().equals("3")) {
+			this.throwException();
+		}
 		return new ModelAndView("order", "order", orderRepository.findById(id).get());
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public ModelAndView post(Order order) {
+	public ModelAndView post(Order order) throws Exception {
+
+		if (this.getVersion().equals("3")) {
+			this.throwException();
+		}
+
 		order = orderService.order(order);
 		return new ModelAndView("success");
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ModelAndView post(@PathVariable("id") long id) {
+	public ModelAndView post(@PathVariable("id") long id) throws Exception {
+
+		if (this.getVersion().equals("3")) {
+			this.throwException();
+		}
 		orderRepository.deleteById(id);
 
 		return new ModelAndView("success");
