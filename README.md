@@ -1,6 +1,6 @@
 # Overview
 
-This repo has the code for the orders service for demostrations.  See the [overview](https://github.com/dt-orders/overview) repo for an overiew for that whole application.
+This repo has the code for the orders service for demonstrations.  See the [overview](https://github.com/dt-orders/overview) repo for an overview for that whole application.
 
 # Developer Notes
 
@@ -34,7 +34,7 @@ The following programs to be installed
 
 ## Build Docker Images and push images to a repository
 
-Use the provided Unix shell scipt that will build the docker image and publish it. There are three versions that will be built.
+Use the provided Unix shell script that will build the docker image and publish it. There are different versions that will be built.  See the [overview](https://github.com/dt-orders/overview) repo for details on the problem patterns.
 
     Just call: `./buildpush.sh <REPOSITORY>`
 
@@ -62,4 +62,4 @@ For example:
 
 # Credits
 
-* Orginal demo code: https://github.com/ewolff/microservice-kubernetes
+* Original demo code: https://github.com/ewolff/microservice-kubernetes
