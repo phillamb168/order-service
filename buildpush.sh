@@ -8,28 +8,34 @@ then
     REPOSITORY=dtdemos
 fi
 
-IMAGE=dt-orders-order-service
-FULLIMAGE=$REPOSITORY/$IMAGE
+IMAGE=$REPOSITORY/dt-orders-order-service
 
 #./mvnw clean package
 echo "Compiling Java"
 ./mvnw clean package -Dmaven.test.skip=true
 ./writeManifest.sh
 
-docker build -t $FULLIMAGE:1 . --build-arg APP_VERSION=1
-docker build -t $FULLIMAGE:2 . --build-arg APP_VERSION=2
-docker build -t $FULLIMAGE:3 . --build-arg APP_VERSION=3
+docker build -t $IMAGE:1 . --build-arg APP_VERSION=1
+docker build -t $IMAGE:2 . --build-arg APP_VERSION=2
+docker build -t $IMAGE:3 . --build-arg APP_VERSION=3
+
+docker tag $IMAGE:1 $IMAGE:1.0.0
+docker tag $IMAGE:2 $IMAGE:2.0.0
+docker tag $IMAGE:3 $IMAGE:3.0.0
 
 echo "========================================================"
 echo "Ready to push images ?"
 echo "========================================================"
 read -rsp "Press ctrl-c to abort. Press any key to continue"
 
-echo "Pushing $FULLIMAGE:1"
-docker push $FULLIMAGE:1
+echo "Pushing $IMAGE:1"
+docker push $IMAGE:1
+docker push $IMAGE:1.0.0
 
-echo "Pushing $FULLIMAGE:2"
-docker push $FULLIMAGE:2
+echo "Pushing $IMAGE:2"
+docker push $IMAGE:2
+docker push $IMAGE:2.0.0
 
-echo "Pushing $FULLIMAGE:3"
-docker push $FULLIMAGE:3
+echo "Pushing $IMAGE:3"
+docker push $IMAGE:3
+docker push $IMAGE:3.0.0
