@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Calendar;
 import java.util.Date; 
+import java.io.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,12 +129,32 @@ class OrderController {
 		}
 	}
 
+	@RequestMapping(value = "/manifest", method = RequestMethod.GET)
+	@ResponseBody
+	public String getManifest() {
+		 File file = new File("/MANIFEST"); 
+		 String manifest = "MANIFEST file not found";
+		 try {
+			 BufferedReader br = new BufferedReader(new FileReader(file));
+			 String line = br.readLine();
+			 manifest = line + "<BR>";
+			 while ((line = br.readLine()) != null) {
+				manifest = manifest + line + "<BR>";
+			 }
+			 br.close();
+		 }
+		 catch(Exception e) {
+			manifest = e.getMessage();
+		 }
+		 return manifest;
+	}
+
 	@RequestMapping("/")
 	public ModelAndView orderList() throws Exception {
-
 		if (this.getVersion().equals("3")) {
 			this.throwException();
 		}
+
 		return new ModelAndView("orderlist", "orders",
 				orderRepository.findAll());
 	}
