@@ -104,7 +104,7 @@ class OrderController {
 		}
 		else
 		{
-			if (this.getVersion().equals("2")) {
+			if (this.getVersion().equals("4")) {
 				System.out.println("N+1 problem = ON");
 				Collection<Customer> allCustomers = customerClient.findAll();
 				// ************************************************

@@ -6,9 +6,10 @@ The intent of this demo is to have versions of the application with normal and b
 
 | Service  | Branch/Docker Tag | Description |
 |---|:---:|---|
-| customer-service | 1 | Normal behavior |
-| customer-service | 2 | Return http 500 status from an internal exception for the add line request `/line` |
-| customer-service | 3 | Return http 500 status from an internal exception for all requests |
+| order-service | 1 | Normal behavior |
+| order-service | 2 | 50% exception (http 500) for new order line only (/order/line URL)  |
+| order-service | 3 | 50% exception (http 500) for all requests |
+| order-service | 4 | n+1 back-end calls for view order form only (/order/form.html) |
 
 # Developer Notes
 
@@ -57,7 +58,6 @@ Use the provided Unix shell script that will build the docker image and run it.
     For example: `./buildrun.sh dtdemos 2`
 
     Using DEV_MODE set to true will fake out the data returned by the the external service calls to catalog and customer services.
-
 
 2. access application at ```http://localhost:8080```
 
