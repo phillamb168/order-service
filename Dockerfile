@@ -1,4 +1,4 @@
-FROM openjdk:16
+FROM openjdk:11
 COPY target/*.jar .
 COPY target/MANIFEST .
 
